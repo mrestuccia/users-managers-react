@@ -35,7 +35,7 @@ class App extends Component {
       .then(() => { return axios.get('/api/users'); })
       .then(users => (users.data))
       .then(users => { return this.setState({ users }); })
-      .then(() => { return hashHistory.push('/users/'); });
+      .then(() => { return hashHistory.push('/users'); });
   }
   render() {
     const active = (pathname) => this.props.router.location.pathname === pathname;
