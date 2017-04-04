@@ -7,7 +7,6 @@ const managerRender = (user) => (
   <div className="panel-body">Managed By <Link to="users/edit">{(user.manager) ? user.manager.name : 'nobody'}</Link></div>
 );
 
-
 const Users = ({ users }) => {
   return (
     <div>

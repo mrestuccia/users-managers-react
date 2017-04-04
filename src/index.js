@@ -16,8 +16,7 @@ class App extends Component {
     super();
     this.state = {
       users: [],
-      managers: [],
-      selected: null
+      managers: []
     };
     // Context Binding
     this.onUserChange = this.onUserChange.bind(this);
@@ -25,27 +24,18 @@ class App extends Component {
   componentDidMount() {
     axios.get('/api/users')
       .then(users => (users.data))
-      .then(users => {
-        this.setState({ users });
-      });
+      .then(users => { this.setState({ users }); });
 
     axios.get('/api/managers')
       .then(managers => (managers.data))
-      .then(managers => {
-        this.setState({ managers });
-      });
+      .then(managers => { this.setState({ managers }); });
   }
   onUserChange(id, managerId) {
-    console.log('onUserChange', id, managerId);
-
     axios.put(`/api/users/${id}`, { managerId })
-      .then(() => {
-        return axios.get('/api/users');
-      })
+      .then(() => { return axios.get('/api/users'); })
       .then(users => (users.data))
-      .then(users => {
-        this.setState({ users });
-      });
+      .then(users => { return this.setState({ users }); })
+      .then(() => { return hashHistory.push('/users/'); });
   }
   render() {
     const active = (pathname) => this.props.router.location.pathname === pathname;
@@ -57,7 +47,7 @@ class App extends Component {
           <li className={active('/') ? 'active' : ''}>
             <Link to="/">Home</Link>
           </li>
-          <li className={active('/users') ? 'active' : ''}>
+          <li className={(active('/users') || active('/users/edit')) ? 'active' : ''}>
             <Link to="/users">Users ({this.state.users.length})</Link>
           </li>
         </ul>
