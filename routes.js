@@ -20,9 +20,12 @@ router.get('/managers', (req, res, next) => {
 });
 
 // PUT /api/users/:id
-router.get('/users/:id', (req, res, next) => {
+router.put('/users/:id', (req, res, next) => {
   const id = req.params.id;
-  //res.sendFile('./index.html');
+  const managerId = req.body.managerId;
+
+  console.log('put', id, managerId);
+  res.status(200).send();
 });
 
 module.exports = router;

@@ -16,8 +16,11 @@ class App extends Component {
     super();
     this.state = {
       users: [],
-      managers: []
-    }
+      managers: [],
+      selected: null
+    };
+    // Context Binding
+    this.onUserChange = this.onUserChange.bind(this);
   }
   componentDidMount() {
     axios.get('/api/users')
@@ -25,21 +28,40 @@ class App extends Component {
       .then(users => {
         this.setState({ users });
       });
+
+    axios.get('/api/managers')
+      .then(managers => (managers.data))
+      .then(managers => {
+        this.setState({ managers });
+      });
+  }
+  onUserChange(id, managerId) {
+    console.log('onUserChange', id, managerId);
+
+    axios.put(`/api/users/${id}`, { managerId })
+      .then(() => {
+        return axios.get('/api/users');
+      })
+      .then(users => (users.data))
+      .then(users => {
+        this.setState({ users });
+      });
   }
   render() {
     const active = (pathname) => this.props.router.location.pathname === pathname;
+    const obj = Object.assign({}, this.state, { onUserChange: this.onUserChange });
     return (
       <div className="container">
         <h1>Users Managers React</h1>
         <ul className="nav nav-tabs" style={{ marginBottom: '10px' }}>
-          <li className={ active('/') ? 'active' : ''}>
+          <li className={active('/') ? 'active' : ''}>
             <Link to="/">Home</Link>
           </li>
-          <li className={ active('/users') ? 'active' : ''}>
+          <li className={active('/users') ? 'active' : ''}>
             <Link to="/users">Users ({this.state.users.length})</Link>
           </li>
         </ul>
-        {this.props.children && React.cloneElement(this.props.children, this.state)}
+        {this.props.children && React.cloneElement(this.props.children, obj)}
       </div>
     );
   }
@@ -53,7 +75,7 @@ const router = (
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
       <Route path="/users" component={Users} />
-      <Route path="/users/edit" component={Users} />
+      <Route path="/users/edit" component={UserEdit} />
     </Route>
   </Router>
 );
