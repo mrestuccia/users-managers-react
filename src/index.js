@@ -6,7 +6,6 @@ import axios from 'axios';
 // Custom Component
 import Home from './Home';
 import Users from './Users';
-import UserEdit from './UserEdit';
 
 
 
@@ -39,7 +38,7 @@ class App extends Component {
   }
   render() {
     const active = (pathname) => this.props.router.location.pathname === pathname;
-    const obj = Object.assign({}, this.state, { onUserChange: this.onUserChange });
+    const obj = Object.assign({}, this.state, { onUserChange: this.onUserChange, location: this.props.router.location.pathname });
     return (
       <div className="container">
         <h1>Users Managers React</h1>
@@ -65,7 +64,7 @@ const router = (
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
       <Route path="/users" component={Users} />
-      <Route path="/users/edit" component={UserEdit} />
+      <Route path="/users/edit" component={Users} />
     </Route>
   </Router>
 );
